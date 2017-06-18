@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_settings">Налаштування</string>
+
+    <string name="btnPlayers">Учасники</string>
+    <string name="btnGames">Ігри</string>
+    <string name="btnStatistics">Статистика</string>
+</resources>
