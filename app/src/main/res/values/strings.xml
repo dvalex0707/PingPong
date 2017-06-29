@@ -1,9 +1,14 @@
 <resources>
-    <string name="app_name">PingPong</string>
-
+    <string name="app_name" translatable="false">PingPong</string>
     <string name="action_settings">Settings</string>
 
     <string name="btnPlayers">Players</string>
     <string name="btnGames">Games</string>
     <string name="btnStatistics">Statistics</string>
+    <string name="btnAddPlayers">Add players</string>
+    <string name="btnNewPlayer">New player</string>
+    <string name="btnOk" translatable="false">OK</string>
+    <string name="btnCancel">Cancel</string>
+    <string name="toastAlreadySelected">Player already exists and selected</string>
+    <string name="toastSelectNow">Player already exists and will be selected</string>
 </resources>

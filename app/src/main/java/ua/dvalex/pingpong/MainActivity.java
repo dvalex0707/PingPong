@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import ua.dvalex.pingpong.db.DB;
+
 public class MainActivity extends AppCompatActivity {
 
     /**
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnPlayers).setOnClickListener(PageSelectOnClickListener.PLAYERS);
         findViewById(R.id.btnGames).setOnClickListener(PageSelectOnClickListener.GAMES);
         findViewById(R.id.btnStatistics).setOnClickListener(PageSelectOnClickListener.STATISTICS);
+
+        DB.getInstance().open(this);
     }
 
     @Override

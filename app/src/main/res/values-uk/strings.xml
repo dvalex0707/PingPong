@@ -5,4 +5,9 @@
     <string name="btnPlayers">Учасники</string>
     <string name="btnGames">Ігри</string>
     <string name="btnStatistics">Статистика</string>
+    <string name="btnAddPlayers">Додати учасників</string>
+    <string name="btnNewPlayer">Новий учасник</string>
+    <string name="btnCancel">Скасувати</string>
+    <string name="toastAlreadySelected">Учасник вже існує та вибраний</string>
+    <string name="toastSelectNow">Учасник вже існує та буде вибраний</string>
 </resources>
