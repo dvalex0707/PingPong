@@ -1,21 +1,19 @@
-package ua.dvalex.pingpong;
+package ua.dvalex.pingpong.fragments;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import ua.dvalex.pingpong.R;
 import ua.dvalex.pingpong.db.ColumnProvider;
 import ua.dvalex.pingpong.db.CursorLoaderHelper;
 import ua.dvalex.pingpong.db.DB;
@@ -85,10 +83,10 @@ public class FragmentPlayers extends Fragment {
             try {
                 db.delete(DB.TABLE_CURRENT_PLAYERS, DB.NAME + " = ?", new String[] { name });
                 db.setTransactionSuccessful();
+                loaderHelper.forceLoad();
             } finally {
                 db.endTransaction();
             }
-            loaderHelper.forceLoad();
         }
      }
 }

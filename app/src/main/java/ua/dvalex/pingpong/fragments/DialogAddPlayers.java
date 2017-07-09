@@ -1,4 +1,4 @@
-package ua.dvalex.pingpong;
+package ua.dvalex.pingpong.fragments;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import ua.dvalex.pingpong.R;
 import ua.dvalex.pingpong.db.ColumnProvider;
 import ua.dvalex.pingpong.db.CursorLoaderHelper;
 import ua.dvalex.pingpong.db.DB;

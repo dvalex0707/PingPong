@@ -8,6 +8,7 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
+import android.widget.ListView;
 
 public class CursorLoaderHelper {
 
@@ -61,6 +62,7 @@ public class CursorLoaderHelper {
     private final FragmentActivity activity;
     private final CursorAdapter adapter;
     private final HelperLoader loader;
+    private ListView listViewToScroll = null;
 
     public CursorLoaderHelper(FragmentActivity activity, CursorAdapter adapter, HelperLoader loader) {
         this.activity = activity;
@@ -73,6 +75,10 @@ public class CursorLoaderHelper {
         activity.getSupportLoaderManager().getLoader(id).forceLoad();
     }
 
+    public void setListViewToScrollDown(ListView listViewToScroll) {
+        this.listViewToScroll = listViewToScroll;
+    }
+
     private class InternalLoaderCallbacks implements LoaderCallbacks<Cursor> {
 
         @Override
@@ -83,6 +89,9 @@ public class CursorLoaderHelper {
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             adapter.swapCursor(data);
+            if (listViewToScroll != null) {
+                listViewToScroll.smoothScrollToPosition(listViewToScroll.getMaxScrollAmount());
+            }
         }
 
         @Override

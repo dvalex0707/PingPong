@@ -10,4 +10,13 @@
     <string name="btnCancel">Отмена</string>
     <string name="toastAlreadySelected">Участник уже существует и выбран</string>
     <string name="toastSelectNow">Участник уже существует и будет выбран</string>
+    <string name="btnStartMatch">Начать матч</string>
+    <string name="action_finish_match">Завершить матч</string>
+    <string name="app_name">Настольный теннис</string>
+    <string name="msgConfirmFinishMatch">Вы желаете завершить матч?</string>
+    <string name="btnYes">Да</string>
+    <string name="msgAtLeastTwoPlayersRequired">Как минимум два участника требуются для игры</string>
+    <string name="lnkGoToPlayersTab">На вкладку выбора участников</string>
+    <string name="fullDateFormat">dd.MM.yyyy HH:mm:ss</string>
+    <string name="shortDateFormat">HH:mm:ss</string>
 </resources>

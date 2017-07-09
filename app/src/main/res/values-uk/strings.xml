@@ -10,4 +10,13 @@
     <string name="btnCancel">Скасувати</string>
     <string name="toastAlreadySelected">Учасник вже існує та вибраний</string>
     <string name="toastSelectNow">Учасник вже існує та буде вибраний</string>
+    <string name="btnStartMatch">Розпочати матч</string>
+    <string name="action_finish_match">Завершити матч</string>
+    <string name="app_name">Настільний теніс</string>
+    <string name="msgConfirmFinishMatch">Ви бажаєте завершити матч?</string>
+    <string name="btnYes">Так</string>
+    <string name="msgAtLeastTwoPlayersRequired">Щонайменш два учасника потрібні для гри</string>
+    <string name="lnkGoToPlayersTab">До вкладки вибору учасників</string>
+    <string name="fullDateFormat">dd.MM.yyyy HH:mm:ss</string>
+    <string name="shortDateFormat">HH:mm:ss</string>
 </resources>
