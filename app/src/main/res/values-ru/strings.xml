@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="action_settings">Настройки</string>
+    <string name="app_name">Настольный теннис</string>
+    <string name="action_finish_match">Завершить матч</string>
 
     <string name="btnPlayers">Участники</string>
     <string name="btnGames">Игры</string>
@@ -8,15 +9,27 @@
     <string name="btnAddPlayers">Добавить участников</string>
     <string name="btnNewPlayer">Новый участник</string>
     <string name="btnCancel">Отмена</string>
+    <string name="btnYes">Да</string>
+    <string name="btnStartMatch">Начать матч</string>
+
     <string name="toastAlreadySelected">Участник уже существует и выбран</string>
     <string name="toastSelectNow">Участник уже существует и будет выбран</string>
-    <string name="btnStartMatch">Начать матч</string>
-    <string name="action_finish_match">Завершить матч</string>
-    <string name="app_name">Настольный теннис</string>
+
     <string name="msgConfirmFinishMatch">Вы желаете завершить матч?</string>
-    <string name="btnYes">Да</string>
     <string name="msgAtLeastTwoPlayersRequired">Как минимум два участника требуются для игры</string>
+
     <string name="lnkGoToPlayersTab">На вкладку выбора участников</string>
+    <string name="checkBoxAllMatches">Все матчи</string>
+
     <string name="fullDateFormat">dd.MM.yyyy HH:mm:ss</string>
     <string name="shortDateFormat">HH:mm:ss</string>
+    <string name="byGamesFormat">%1$d : %2$d (%3$.1f%% : %4$.1f%%), всего %5$d</string>
+    <string name="byScoresFormat">%1$d : %2$d, всего %3$d</string>
+
+    <string name="total">Итого</string>
+    <string name="byGames">По играм:</string>
+    <string name="byScores">По очкам:</string>
+    <string name="averageScore">Средний счет:</string>
+    <string name="totalGames">Всего игр: %d</string>
+    <string name="totalScores">Всего очков: %d</string>
 </resources>

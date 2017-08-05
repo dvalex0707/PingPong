@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">PingPong</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_finish_match">Finish match</string>
 
     <string name="btnPlayers">Players</string>
     <string name="btnGames">Games</string>
@@ -9,18 +9,31 @@
     <string name="btnNewPlayer">New player</string>
     <string name="btnOk" translatable="false">OK</string>
     <string name="btnCancel">Cancel</string>
-    <string name="toastAlreadySelected">Player already exists and selected</string>
-    <string name="toastSelectNow">Player already exists and will be selected</string>
+    <string name="btnYes">Yes</string>
     <string name="btnStartMatch">Start match</string>
-    <string name="action_finish_match">Finish match</string>
     <string name="btnPlayer1WinsContentDescription" translatable="false">Player1 wins</string>
     <string name="btnPlayer2WinsContentDescription" translatable="false">Player2 wins</string>
-    <string name="semicolon" translatable="false">:</string>
     <string name="btnNewPlayerContentDescription" translatable="false">New Player</string>
+
+    <string name="toastAlreadySelected">Player already exists and selected</string>
+    <string name="toastSelectNow">Player already exists and will be selected</string>
+
     <string name="msgConfirmFinishMatch">Do you want to finish new match?</string>
-    <string name="btnYes">Yes</string>
     <string name="msgAtLeastTwoPlayersRequired">At least two player required for play game</string>
+
+    <string name="semicolon" translatable="false">:</string>
     <string name="lnkGoToPlayersTab">Go to Players tab</string>
+    <string name="checkBoxAllMatches">All matches</string>
+
     <string name="fullDateFormat">MM/dd/yyyy HH:mm:ss</string>
     <string name="shortDateFormat">HH:mm:ss</string>
+    <string name="byGamesFormat">%1$d : %2$d (%3$.1f%% : %4$.1f%%), total %5$d</string>
+    <string name="byScoresFormat">%1$d : %2$d, total %3$d</string>
+
+    <string name="total">Total</string>
+    <string name="byGames">Games:</string>
+    <string name="byScores">Scores:</string>
+    <string name="averageScore">Average scores:</string>
+    <string name="totalGames">Total games: %d</string>
+    <string name="totalScores">Total scores: %d</string>
 </resources>

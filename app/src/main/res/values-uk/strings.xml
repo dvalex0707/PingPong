@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="action_settings">Налаштування</string>
+    <string name="app_name">Настільний теніс</string>
+    <string name="action_finish_match">Завершити матч</string>
 
     <string name="btnPlayers">Учасники</string>
     <string name="btnGames">Ігри</string>
@@ -8,15 +9,27 @@
     <string name="btnAddPlayers">Додати учасників</string>
     <string name="btnNewPlayer">Новий учасник</string>
     <string name="btnCancel">Скасувати</string>
+    <string name="btnYes">Так</string>
+    <string name="btnStartMatch">Розпочати матч</string>
+
     <string name="toastAlreadySelected">Учасник вже існує та вибраний</string>
     <string name="toastSelectNow">Учасник вже існує та буде вибраний</string>
-    <string name="btnStartMatch">Розпочати матч</string>
-    <string name="action_finish_match">Завершити матч</string>
-    <string name="app_name">Настільний теніс</string>
+
     <string name="msgConfirmFinishMatch">Ви бажаєте завершити матч?</string>
-    <string name="btnYes">Так</string>
     <string name="msgAtLeastTwoPlayersRequired">Щонайменш два учасника потрібні для гри</string>
+
     <string name="lnkGoToPlayersTab">До вкладки вибору учасників</string>
+    <string name="checkBoxAllMatches">Всі матчі</string>
+
     <string name="fullDateFormat">dd.MM.yyyy HH:mm:ss</string>
     <string name="shortDateFormat">HH:mm:ss</string>
+    <string name="byGamesFormat">%1$d : %2$d (%3$.1f%% : %4$.1f%%), всього %5$d</string>
+    <string name="byScoresFormat">%1$d : %2$d, всього %3$d</string>
+
+    <string name="total">Разом</string>
+    <string name="byGames">По іграм:</string>
+    <string name="byScores">По очкам:</string>
+    <string name="averageScore">Середній рахунок:</string>
+    <string name="totalGames">Всього ігор: %d</string>
+    <string name="totalScores">Всього очок: %d</string>
 </resources>

@@ -8,12 +8,15 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
-import android.widget.ListView;
 
 public class CursorLoaderHelper {
 
     public interface HelperLoader {
-        public Cursor loadInBackground();
+        Cursor loadInBackground();
+    }
+
+    public interface RunOnFinish {
+        void run();
     }
 
     public static class StandardLoader implements  HelperLoader {
@@ -62,7 +65,7 @@ public class CursorLoaderHelper {
     private final FragmentActivity activity;
     private final CursorAdapter adapter;
     private final HelperLoader loader;
-    private ListView listViewToScroll = null;
+    private RunOnFinish runOnFinish = null;
 
     public CursorLoaderHelper(FragmentActivity activity, CursorAdapter adapter, HelperLoader loader) {
         this.activity = activity;
@@ -75,8 +78,8 @@ public class CursorLoaderHelper {
         activity.getSupportLoaderManager().getLoader(id).forceLoad();
     }
 
-    public void setListViewToScrollDown(ListView listViewToScroll) {
-        this.listViewToScroll = listViewToScroll;
+    public void setRunOnFinish(RunOnFinish runOnFinish) {
+        this.runOnFinish = runOnFinish;
     }
 
     private class InternalLoaderCallbacks implements LoaderCallbacks<Cursor> {
@@ -89,8 +92,8 @@ public class CursorLoaderHelper {
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             adapter.swapCursor(data);
-            if (listViewToScroll != null) {
-                listViewToScroll.smoothScrollToPosition(listViewToScroll.getMaxScrollAmount());
+            if (runOnFinish != null) {
+                runOnFinish.run();
             }
         }
 

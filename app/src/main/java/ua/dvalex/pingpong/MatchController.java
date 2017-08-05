@@ -77,7 +77,7 @@ public class MatchController implements SPConst {
 
     public void startMatch() {
         Date date = new Date();
-        matchDate = Utils.dateToDBFormat(date);
+        matchDate = Utils.dateToDbFormat(date);
         currentMatch = -1;
         settingsProvider.set(MATCH_DATE, matchDate);
         settingsProvider.set(CURRENT_MATCH, -1L);

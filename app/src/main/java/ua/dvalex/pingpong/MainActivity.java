@@ -128,6 +128,9 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     fragmentGames.setupSpinners();
                     break;
+                case 2:
+                    fragmentStatistics.onOpenTab();
+                    break;
             }
         }
 

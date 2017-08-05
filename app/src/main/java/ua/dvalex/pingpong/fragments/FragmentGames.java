@@ -116,7 +116,12 @@ public class FragmentGames extends Fragment implements SPConst {
         CursorAdapter adapter = new GamesAdapter(inflater);
         lvGames.setAdapter(adapter);
         loaderHelper = new CursorLoaderHelper(getActivity(), adapter, new GamesHelperLoader());
-        loaderHelper.setListViewToScrollDown(lvGames);
+        loaderHelper.setRunOnFinish(new CursorLoaderHelper.RunOnFinish() {
+            @Override
+            public void run() {
+                lvGames.smoothScrollToPosition(lvGames.getMaxScrollAmount());
+            }
+        });
     }
 
     private class GamesHelperLoader implements CursorLoaderHelper.HelperLoader {
@@ -142,6 +147,7 @@ public class FragmentGames extends Fragment implements SPConst {
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
             columnProvider.read(cursor);
             View view = inflater.inflate(R.layout.games_list_item, parent, false);
+//            view.setOnClickListener();
             return view;
         }
 

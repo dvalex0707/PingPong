@@ -13,11 +13,11 @@ public class Utils {
     private static final SimpleDateFormat DB_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private static final SimpleDateFormat DATE_ONLY_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
 
-    public static String dateToDBFormat(Date date) {
+    public static String dateToDbFormat(Date date) {
         return DB_DATE_FORMAT.format(date);
     }
 
-    public static Date DBFormatToDate(String string) throws ParseException {
+    public static Date dbFormatToDate(String string) throws ParseException {
         return DB_DATE_FORMAT.parse(string);
     }
 
