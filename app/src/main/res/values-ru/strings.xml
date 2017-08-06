@@ -9,14 +9,27 @@
     <string name="btnAddPlayers">Добавить участников</string>
     <string name="btnNewPlayer">Новый участник</string>
     <string name="btnCancel">Отмена</string>
+    <string name="btnSave">Сохранить</string>
+    <string name="btnDelete">Удалить</string>
     <string name="btnYes">Да</string>
     <string name="btnStartMatch">Начать матч</string>
+
+    <string name="titleEditGame">Редактирование игры</string>
+    <string name="titleDeleteGame">Удаление игры</string>
+    <string name="titleTooFewPlayers">Слишком мало участников</string>
+    <string name="titleSaveError">Ошибка записи</string>
 
     <string name="toastAlreadySelected">Участник уже существует и выбран</string>
     <string name="toastSelectNow">Участник уже существует и будет выбран</string>
 
     <string name="msgConfirmFinishMatch">Вы желаете завершить матч?</string>
+    <string name="msgConfirmDeleteGame">Вы желаете удалить эту игру?</string>
+    <string name="msgConfirmEditGame">Вы желаете изменить результаты этой игры?</string>
+    <string name="msgConfirmChangeDateTime">Вы собираетесь изменить дату или время этой игры. Вы действительно хотите это сделать?</string>
     <string name="msgAtLeastTwoPlayersRequired">Как минимум два участника требуются для игры</string>
+    <string name="msgAtLeastTwoPlayersShouldBeSelectedOnPlayersTab">Как минимум два участника должны быть выбраны на вкладке ’Участники’</string>
+    <string name="msgDateTimeFormatError">Ошибка формата Даты/Времени</string>
+    <string name="msgSaveError">Ошибка сохранения результатов игры в базу данных</string>
 
     <string name="lnkGoToPlayersTab">На вкладку выбора участников</string>
     <string name="checkBoxAllMatches">Все матчи</string>

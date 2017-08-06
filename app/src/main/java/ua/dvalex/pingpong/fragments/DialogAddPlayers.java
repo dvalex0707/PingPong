@@ -229,7 +229,7 @@ public class DialogAddPlayers extends DialogFragment {
 
         private void processSelectedPlayers() {
             deleteRequired = false;
-            deleteStringBuilder = new StringBuilder(DB.PLAYER_ID + " in (");
+            deleteStringBuilder = new StringBuilder(DB.PLAYER_ID).append(" in (");
             addItems = new ArrayList<>();
             for (Map.Entry<String, Player> entry : players.entrySet()) {
                 String name = entry.getKey();

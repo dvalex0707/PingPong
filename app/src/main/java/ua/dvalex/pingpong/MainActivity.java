@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         public void onPageSelected(int position) {
             switch (position) {
                 case 1:
-                    fragmentGames.setupSpinners();
+                    fragmentGames.reloadControls();
                     break;
                 case 2:
                     fragmentStatistics.onOpenTab();

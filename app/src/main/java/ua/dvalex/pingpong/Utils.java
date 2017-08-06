@@ -32,6 +32,16 @@ public class Utils {
         return dateFormat.format(date);
     }
 
+    public static String timestampToString(Context context, long timestamp) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(context.getString(R.string.fullDateFormat));
+        return dateFormat.format(new Date(timestamp));
+    }
+
+    public static long stringToTimestamp(Context context, String date) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(context.getString(R.string.fullDateFormat));
+        return dateFormat.parse(date).getTime();
+    }
+
     public static void showSoftwareKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext()
                 .getSystemService(Context.INPUT_METHOD_SERVICE);

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8sp">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/etDate"
+            android:inputType="date|datetime|time|numberSigned|numberDecimal"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btnDelete"
+            android:id="@+id/btnDelete"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="4sp"
+            android:layout_marginStart="4sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvDateTimeFormatError"
+        android:text="@string/msgDateTimeFormatError"
+        android:textColor="@color/red"
+        android:textStyle="bold"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spPlayer1"
+            android:layout_weight="1"
+            android:layout_margin="2sp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16sp"
+            android:layout_marginRight="16sp" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spPlayer2"
+            android:layout_weight="1"
+            android:layout_margin="2sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etScore1"
+            android:layout_weight="1"
+            android:layout_margin="2sp"
+            android:inputType="number"
+            android:gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/semicolon"
+            android:layout_marginLeft="16sp"
+            android:layout_marginRight="16sp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etScore2"
+            android:layout_weight="1"
+            android:layout_margin="2sp"
+            android:inputType="number"
+            android:gravity="center_horizontal" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btnSave"
+            android:id="@+id/btnSave"
+            android:layout_weight="1"
+            android:layout_marginLeft="4sp"
+            android:layout_marginRight="4sp"
+            android:enabled="false" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btnCancel"
+            android:id="@+id/btnCancel"
+            android:layout_weight="1"
+            android:layout_marginLeft="4sp"
+            android:layout_marginRight="4sp" />
+    </LinearLayout>
+
+</LinearLayout>

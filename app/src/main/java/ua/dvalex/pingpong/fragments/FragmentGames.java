@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
@@ -18,8 +17,6 @@ import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -28,18 +25,15 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import ua.dvalex.pingpong.MainActivity;
 import ua.dvalex.pingpong.MatchController;
 import ua.dvalex.pingpong.R;
 import ua.dvalex.pingpong.Utils;
+import ua.dvalex.pingpong.controls.PlayersPairControl;
 import ua.dvalex.pingpong.db.ColumnProvider;
 import ua.dvalex.pingpong.db.CursorLoaderHelper;
 import ua.dvalex.pingpong.db.DB;
+import ua.dvalex.pingpong.db.GameSaveHelper;
 import ua.dvalex.pingpong.settings.SPConst;
 import ua.dvalex.pingpong.settings.SettingsProvider;
 
@@ -61,14 +55,12 @@ public class FragmentGames extends Fragment implements SPConst {
             DB.TABLE_GAMES + "." + DB.PLAYER2 + "=" + DB.PLAYER2 + "." + DB.ID + " and " +
             DB.TABLE_GAMES + "." + DB.MATCH + " = ?";
     private final SQLiteDatabase db = DB.getInstance().get();
-    private final List<String> players = new ArrayList<>();
-    private final Map<String, Integer> nameToIdMap = new HashMap<>();
     private MatchController matchController;
     private String lastWinner;
     private Button btnStartMatch;
     private LinearLayout llMsgTooFewPlayers, llAddNewGame;
     private ListView lvGames;
-    private Spinner spPlayer1, spPlayer2;
+    private PlayersPairControl playersPairControl;
     private ImageButton btnPlayer1Wins, btnPlayer2Wins, btnSave;
     private EditText etScore1, etScore2;
     private TextView lnkGoToPlayersTab;
@@ -85,7 +77,7 @@ public class FragmentGames extends Fragment implements SPConst {
         setupGamesList(inflater);
         setClickListenerForButtons();
         setTextWatchers();
-        setupSpinners();
+        reloadControls();
         return view;
     }
 
@@ -94,8 +86,10 @@ public class FragmentGames extends Fragment implements SPConst {
         lvGames = (ListView) v.findViewById(R.id.lvGames);
         llMsgTooFewPlayers = (LinearLayout) v.findViewById(R.id.llMsgTooFewPlayers);
         llAddNewGame = (LinearLayout) v.findViewById(R.id.llAddNewGame);
-        spPlayer1 = (Spinner) v.findViewById(R.id.spPlayer1);
-        spPlayer2 = (Spinner) v.findViewById(R.id.spPlayer2);
+        playersPairControl = new PlayersPairControl(getContext(),
+                (Spinner) v.findViewById(R.id.spPlayer1),
+                (Spinner) v.findViewById(R.id.spPlayer2));
+        playersPairControl.setup(new PlayerChangedListener());
         btnPlayer1Wins = (ImageButton) v.findViewById(R.id.btnPlayer1Wins);
         etScore1 = (EditText) v.findViewById(R.id.etScore1);
         etScore2 = (EditText) v.findViewById(R.id.etScore2);
@@ -104,6 +98,27 @@ public class FragmentGames extends Fragment implements SPConst {
         setEnableButton(btnSave, false);
         lnkGoToPlayersTab = (TextView) v.findViewById(R.id.lnkGoToPlayersTab);
         setUnderline(lnkGoToPlayersTab);
+    }
+
+    private class PlayerChangedListener implements PlayersPairControl.OnSelectionChangedListener {
+        @Override
+        public void change() {
+            resetScores();
+        }
+    }
+
+    private void resetScores() {
+        setEnableButton(btnPlayer1Wins, true);
+        setEnableButton(btnPlayer2Wins, true);
+        resetEditText(etScore1);
+        resetEditText(etScore2);
+    }
+
+    private void resetEditText(EditText editText) {
+        editText.setText("");
+        editText.setTypeface(Typeface.DEFAULT);
+        editText.setTextColor(Color.BLACK);
+        editText.setEnabled(true);
     }
 
     private void setUnderline(TextView textView) {
@@ -135,7 +150,7 @@ public class FragmentGames extends Fragment implements SPConst {
     private class GamesAdapter extends CursorAdapter {
 
         private final LayoutInflater inflater;
-        private final ColumnProvider columnProvider = new ColumnProvider(DB.TIMESTAMP,
+        private final ColumnProvider columnProvider = new ColumnProvider(DB.ID, DB.TIMESTAMP,
                 DB.PLAYER1, DB.PLAYER2, DB.SCORE1, DB.SCORE2);
 
         public GamesAdapter(LayoutInflater inflater) {
@@ -147,8 +162,23 @@ public class FragmentGames extends Fragment implements SPConst {
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
             columnProvider.read(cursor);
             View view = inflater.inflate(R.layout.games_list_item, parent, false);
-//            view.setOnClickListener();
+            view.setLongClickable(true);
+            view.setOnLongClickListener(new GameLongClickListener());
             return view;
+        }
+
+        private class GameLongClickListener implements View.OnLongClickListener {
+
+            @Override
+            public boolean onLongClick(View v) {
+                Bundle args = new Bundle();
+                args.putLong(DialogEditGame.GAME_ID_KEY, (long) v.getTag());
+                DialogEditGame dialog = new DialogEditGame();
+                dialog.setLoaderHelper(loaderHelper);
+                dialog.setArguments(args);
+                getFragmentManager().beginTransaction().add(dialog, null).addToBackStack(null).commit();
+                return true;
+            }
         }
 
         @Override
@@ -170,6 +200,7 @@ public class FragmentGames extends Fragment implements SPConst {
             tvScore2.setText(String.valueOf(s2));
             tvScore1.setTextColor(getResources().getColor(s1 > s2 ? R.color.red : R.color.black));
             tvScore2.setTextColor(getResources().getColor(s2 > s1 ? R.color.red : R.color.black));
+            view.setTag(cursor.getLong(columnProvider.get(DB.ID)));
         }
     }
 
@@ -197,7 +228,7 @@ public class FragmentGames extends Fragment implements SPConst {
             switch (v.getId()) {
                 case R.id.btnStartMatch:
                     matchController.startMatch();
-                    setupSpinners();
+                    reloadControls();
                     loaderHelper.forceLoad();
                     break;
                 case R.id.btnSave:
@@ -229,17 +260,16 @@ public class FragmentGames extends Fragment implements SPConst {
 
         private void save() {
             matchController.saveMatchIfNeed();
-            name1 = (String) spPlayer1.getSelectedItem();
-            name2 = (String) spPlayer2.getSelectedItem();
+            name1 = playersPairControl.getName1();
+            name2 = playersPairControl.getName2();
             score1 = Integer.valueOf(etScore1.getText().toString().trim());
             score2 = Integer.valueOf(etScore2.getText().toString().trim());
 
             setLastWinner();
-            ContentValues gameContentValues = createGameContentValues();
-            long gameIndex = saveGame(gameContentValues);
+            Long gameIndex = saveGame();
             saveGameIndex(gameIndex);
             resetScores();
-            setupSpinners();
+            reloadControls();
         }
 
         private void setLastWinner() {
@@ -253,32 +283,17 @@ public class FragmentGames extends Fragment implements SPConst {
             SettingsProvider.getInstance().set(LAST_WINNER, lastWinner);
         }
 
-        @NonNull
-        private ContentValues createGameContentValues() {
-            ContentValues cv = new ContentValues();
-            cv.put(DB.MATCH, matchController.getCurrentMatch());
-            cv.put(DB.TIMESTAMP, System.currentTimeMillis());
-            cv.put(DB.PLAYER1, nameToIdMap.get(name1));
-            cv.put(DB.PLAYER2, nameToIdMap.get(name2));
-            cv.put(DB.SCORE1, score1);
-            cv.put(DB.SCORE2, score2);
-            return cv;
+        private long saveGame() {
+            GameSaveHelper saver = new GameSaveHelper(FragmentGames.this, loaderHelper);
+            saver.setMatchId(matchController.getCurrentMatch()).setTimestamp(System.currentTimeMillis())
+                    .setPlayer1Id(playersPairControl.getPlayerId(name1))
+                    .setPlayer2Id(playersPairControl.getPlayerId(name2))
+                    .setScore1(score1).setScore2(score2);
+            return saver.save();
         }
 
-        private long saveGame(ContentValues gameContentValues) {
-            long gameIndex = 0;
-            try {
-                db.beginTransaction();
-                gameIndex = db.insertOrThrow(DB.TABLE_GAMES, null, gameContentValues);
-                db.setTransactionSuccessful();
-                loaderHelper.forceLoad();
-            } finally {
-                db.endTransaction();
-            }
-            return gameIndex;
-        }
-
-        private void saveGameIndex(long gameIndex) {
+        private void saveGameIndex(Long gameIndex) {
+            if (gameIndex == null) return;
             ContentValues gameIndexContentValues = new ContentValues();
             gameIndexContentValues.put(DB.GAME_INDEX, gameIndex);
             try {
@@ -297,70 +312,16 @@ public class FragmentGames extends Fragment implements SPConst {
         button.setEnabled(enable);
     }
 
-    public void setupSpinners() {
-        loadPlayers();
+    public void reloadControls() {
         if (!matchController.isMatchStarted()) return;
-
-        boolean enoughPlayers = players.size() >= 2;
-        llMsgTooFewPlayers.setVisibility(enoughPlayers ? View.GONE : View.VISIBLE);
-        llAddNewGame.setVisibility(enoughPlayers ? View.VISIBLE : View.GONE);
-        if (!enoughPlayers) return;
-
-        PlayersAdapter adapter1 = new PlayersAdapter(getContext(), players, lastWinner);
-        spPlayer1.setAdapter(adapter1);
-        PlayersAdapter adapter2 = new PlayersAdapter(getContext(), players, null);
-        spPlayer2.setAdapter(adapter2);
-        checkSpinners(true);
-        PlayersItemClickListener listener = new PlayersItemClickListener();
-        spPlayer1.setOnItemSelectedListener(listener);
-        spPlayer2.setOnItemSelectedListener(listener);
-    }
-
-    private void loadPlayers() {
-        players.clear();
-        nameToIdMap.clear();
-        Cursor cursor = DB.getInstance().get()
-                .query(DB.TABLE_CURRENT_PLAYERS, null, null, null, null, null, DB.GAME_INDEX);
-        cursor.moveToFirst();
-        if (cursor.getCount() > 0) {
-            int colId = cursor.getColumnIndex(DB.PLAYER_ID);
-            int colName = cursor.getColumnIndex(DB.NAME);
-            do {
-                String name = cursor.getString(colName);
-                players.add(name);
-                nameToIdMap.put(name, cursor.getInt(colId));
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-    }
-
-    private class PlayersAdapter extends ArrayAdapter<String> {
-
-        public PlayersAdapter(Context context, List<String> list, String winner) {
-            super(context, android.R.layout.simple_spinner_dropdown_item);
-            if (winner != null) {
-                add(winner);
-            }
-            for (String name : list) {
-                if (winner == null || !name.equals(winner)) {
-                    add(name);
-                }
-            }
-        }
-    }
-
-    private void checkSpinners(boolean selectedFirstSpinner) {
-        String player1 = (String) spPlayer1.getSelectedItem();
-        String player2 = (String) spPlayer2.getSelectedItem();
-        if (!player1.equals(player2)) return;
-        String playerToCompare = (selectedFirstSpinner ? player1 : player2);
-        Spinner spinnerToChange = (selectedFirstSpinner ? spPlayer2: spPlayer1);
-        PlayersAdapter adapter = (PlayersAdapter) spinnerToChange.getAdapter();
-        for (int i = 0; i < adapter.getCount(); i++) {
-            if (!adapter.getItem(i).equals(playerToCompare)) {
-                spinnerToChange.setSelection(i);
-                return;
-            }
+        try {
+            playersPairControl.loadPlayers();
+            llMsgTooFewPlayers.setVisibility(View.GONE);
+            llAddNewGame.setVisibility(View.VISIBLE);
+            playersPairControl.reload(lastWinner);
+        } catch (PlayersPairControl.NoEnoughPlayersException e) {
+            llMsgTooFewPlayers.setVisibility(View.VISIBLE);
+            llAddNewGame.setVisibility(View.GONE);
         }
     }
 
@@ -399,29 +360,7 @@ public class FragmentGames extends Fragment implements SPConst {
         }
     }
 
-    private class PlayersItemClickListener implements AdapterView.OnItemSelectedListener {
-
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            checkSpinners(parent == spPlayer1);
-            resetScores();
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) { }
-    }
-
-    private void resetScores() {
-        setEnableButton(btnPlayer1Wins, true);
-        setEnableButton(btnPlayer2Wins, true);
-        resetEditText(etScore1);
-        resetEditText(etScore2);
-    }
-
-    private void resetEditText(EditText editText) {
-        editText.setText("");
-        editText.setTypeface(Typeface.DEFAULT);
-        editText.setTextColor(Color.BLACK);
-        editText.setEnabled(true);
+    public void forceLoad() {
+        loaderHelper.forceLoad();
     }
 }
