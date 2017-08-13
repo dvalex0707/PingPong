@@ -5,11 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
 import java.util.Date;
 
@@ -30,12 +25,11 @@ public class MatchController implements SPConst {
     private MatchController() {
     }
 
+    private final FragmentGamesAppearanceController fragmentGamesAppearanceController =
+            FragmentGamesAppearanceController.getInstance();
     private SettingsProvider settingsProvider;
     private SQLiteDatabase db;
     private Context context;
-    private MenuItem menuItem = null;
-    private LinearLayout llGamesLayout = null;
-    private Button btnStartMatch;
     private String matchDate;
     private long currentMatch;
 
@@ -47,34 +41,6 @@ public class MatchController implements SPConst {
         currentMatch = settingsProvider.getLong(CURRENT_MATCH, -1);
     }
 
-    public void setMenu(Menu menu) {
-        menuItem = menu.findItem(R.id.action_finish_match);
-        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                finishMatch();
-                return true;
-            }
-        });
-        setVisibility();
-    }
-
-    public void setGamesView(View view) {
-        llGamesLayout = (LinearLayout) view.findViewById(R.id.llGamesLayout);
-        btnStartMatch = (Button) view.findViewById(R.id.btnStartMatch);
-        setVisibility();
-    }
-
-    private void setVisibility() {
-        if (menuItem != null) {
-            menuItem.setVisible(matchDate != null);
-        }
-        if (llGamesLayout != null) {
-            llGamesLayout.setVisibility(matchDate != null ? View.VISIBLE: View.GONE);
-            btnStartMatch.setVisibility(matchDate != null ? View.GONE : View.VISIBLE);
-        }
-    }
-
     public void startMatch() {
         Date date = new Date();
         matchDate = Utils.dateToDbFormat(date);
@@ -82,7 +48,7 @@ public class MatchController implements SPConst {
         settingsProvider.set(MATCH_DATE, matchDate);
         settingsProvider.set(CURRENT_MATCH, -1L);
         settingsProvider.set(LAST_WINNER, null);
-        setVisibility();
+        fragmentGamesAppearanceController.setMatchStarted(true);
     }
 
     public void saveMatchIfNeed() {
@@ -96,13 +62,12 @@ public class MatchController implements SPConst {
             db.setTransactionSuccessful();
             settingsProvider.set(CURRENT_MATCH, currentMatch);
             settingsProvider.set(LAST_WINNER, null);
-            setVisibility();
         } finally {
             db.endTransaction();
         }
     }
 
-    private void finishMatch() {
+    public void finishMatch() {
         AlertDialog.Builder adb = new AlertDialog.Builder(context);
         adb.setTitle(R.string.action_finish_match).setMessage(R.string.msgConfirmFinishMatch);
         adb.setNegativeButton(R.string.btnCancel, null);
@@ -114,7 +79,7 @@ public class MatchController implements SPConst {
                 settingsProvider.set(MATCH_DATE, null);
                 settingsProvider.set(CURRENT_MATCH, null);
                 settingsProvider.set(LAST_WINNER, null);
-                setVisibility();
+                fragmentGamesAppearanceController.setMatchStarted(false);
             }
         });
         adb.show();

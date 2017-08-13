@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.Locale;
@@ -19,6 +20,9 @@ import ua.dvalex.pingpong.settings.SettingsProvider;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final MatchController matchController = MatchController.getInstance();
+    private final FragmentGamesAppearanceController fragmentGamesAppearanceController =
+            FragmentGamesAppearanceController.getInstance();
     private FragmentPlayers fragmentPlayers;
     private FragmentGames fragmentGames;
     private FragmentStatistics fragmentStatistics;
@@ -31,12 +35,12 @@ public class MainActivity extends AppCompatActivity {
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    SectionsPagerAdapter mSectionsPagerAdapter;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    ViewPager mViewPager;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         DB.getInstance().open(this);
         SettingsProvider.getInstance().setup(this);
-        MatchController.getInstance().startController(this);
+        matchController.startController(this);
 
         fragmentPlayers = new FragmentPlayers();
         fragmentGames = new FragmentGames();
@@ -70,7 +74,23 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        MatchController.getInstance().setMenu(menu);
+        fragmentGamesAppearanceController.setActionFinish(menu.findItem(R.id.action_finish_match));
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_finish_match:
+                matchController.finishMatch();
+                item.setVisible(false);
+                break;
+            case R.id.action_history:
+                boolean historyMode = !item.isChecked();
+                item.setChecked(historyMode);
+                fragmentGamesAppearanceController.setHistoryMode(historyMode);
+                break;
+        }
         return true;
     }
 

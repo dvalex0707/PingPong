@@ -23,7 +23,7 @@ import ua.dvalex.pingpong.db.DB;
 /**
  * Created by alex on 12.08.17
  */
-public class MatchesControl {
+public class MatchesSpinnerControl {
 
     public interface OnSelect {
         void onSelect();
@@ -35,7 +35,7 @@ public class MatchesControl {
     private OnSelect onSelect = null;
     private CursorLoaderHelper spinnerCursorLoader;
 
-    public MatchesControl(FragmentActivity activity, LayoutInflater layoutInflater, Spinner spMatches) {
+    public MatchesSpinnerControl(FragmentActivity activity, LayoutInflater layoutInflater, Spinner spMatches) {
         this.activity = activity;
         this.layoutInflater = layoutInflater;
         this.spMatches = spMatches;

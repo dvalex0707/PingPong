@@ -5,5 +5,9 @@
         android:title="@string/action_finish_match"
         android:icon="@drawable/ic_finish_white_24dp"
         android:orderInCategory="100"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
+    <item android:id="@+id/action_history"
+        android:title="@string/action_history"
+        app:showAsAction="never"
+        android:checkable="true" />
 </menu>

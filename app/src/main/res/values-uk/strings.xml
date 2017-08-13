@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Настільний теніс</string>
     <string name="action_finish_match">Завершити матч</string>
+    <string name="action_history">Історія</string>
 
     <string name="btnPlayers">Учасники</string>
     <string name="btnGames">Ігри</string>
@@ -13,6 +14,7 @@
     <string name="btnDelete">Видалити</string>
     <string name="btnYes">Так</string>
     <string name="btnStartMatch">Розпочати матч</string>
+    <string name="btnAddGame">Додати гру</string>
 
     <string name="titleEditGame">Редагування гри</string>
     <string name="titleDeleteGame">Видалення гри</string>

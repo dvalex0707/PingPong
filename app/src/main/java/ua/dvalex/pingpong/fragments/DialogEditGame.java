@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -20,7 +21,7 @@ import java.text.ParseException;
 
 import ua.dvalex.pingpong.R;
 import ua.dvalex.pingpong.Utils;
-import ua.dvalex.pingpong.controls.PlayersPairControl;
+import ua.dvalex.pingpong.controls.PlayersPairSpinnersControl;
 import ua.dvalex.pingpong.db.CursorLoaderHelper;
 import ua.dvalex.pingpong.db.DB;
 import ua.dvalex.pingpong.db.GameSaveHelper;
@@ -30,18 +31,35 @@ import ua.dvalex.pingpong.db.GameSaveHelper;
  */
 public class DialogEditGame extends DialogFragment {
 
-    public final static String GAME_ID_KEY = "GameIdKey";
-    public final static String MATCH_ID_KEY = "MatchIdKey";
+    private final static String GAME_ID_KEY = "GameIdKey";
+    private final static String MATCH_ID_KEY = "MatchIdKey";
     private final SQLiteDatabase db = DB.getInstance().get();
     private CursorLoaderHelper loaderHelper;
     private EditText etDate, etScore1, etScore2;
     private TextView tvDateTimeFormatError;
     private Button btnDelete, btnSave, btnCancel;
-    private PlayersPairControl playersPairControl;
+    private PlayersPairSpinnersControl playersPairSpinnersControl;
 
     private Long gameId = null, matchId = null;
     private long timestamp, playerId1, playerId2;
     private int score1, score2;
+
+    public static void startAddGame(Fragment fragment, long id, CursorLoaderHelper loaderHelper) {
+        start(fragment, id, loaderHelper, MATCH_ID_KEY);
+    }
+
+    public static void startEditGame(Fragment fragment, long id, CursorLoaderHelper loaderHelper) {
+        start(fragment, id, loaderHelper, GAME_ID_KEY);
+    }
+
+    private static void start(Fragment fragment, long id, CursorLoaderHelper loaderHelper, String key) {
+        Bundle args = new Bundle();
+        args.putLong(key, id);
+        DialogEditGame dialog = new DialogEditGame();
+        dialog.setLoaderHelper(loaderHelper);
+        dialog.setArguments(args);
+        fragment.getFragmentManager().beginTransaction().add(dialog, null).addToBackStack(null).commit();
+    }
 
     @Nullable
     @Override
@@ -58,7 +76,7 @@ public class DialogEditGame extends DialogFragment {
         try {
             loadGame();
             setupListeners();
-        } catch (PlayersPairControl.NoEnoughPlayersException e) {
+        } catch (PlayersPairSpinnersControl.NoEnoughPlayersException e) {
             showNoEnoughPlayersAlert(dialog);
         }
         return view;
@@ -79,13 +97,13 @@ public class DialogEditGame extends DialogFragment {
         }
         btnSave = (Button) v.findViewById(R.id.btnSave);
         btnCancel = (Button) v.findViewById(R.id.btnCancel);
-        playersPairControl = new PlayersPairControl(getContext(),
+        playersPairSpinnersControl = new PlayersPairSpinnersControl(getContext(),
                 (Spinner) v.findViewById(R.id.spPlayer1),
                 (Spinner) v.findViewById(R.id.spPlayer2));
-        playersPairControl.setup(new PlayerChangedListener());
+        playersPairSpinnersControl.setup(new PlayerChangedListener());
     }
 
-    private class PlayerChangedListener implements  PlayersPairControl.OnSelectionChangedListener {
+    private class PlayerChangedListener implements  PlayersPairSpinnersControl.OnSelectionChangedListener {
         @Override
         public void change() {
             setSaveEnabled();
@@ -110,8 +128,8 @@ public class DialogEditGame extends DialogFragment {
         if (!dateString.equals(Utils.timestampToString(getContext(), ts)))
             throw new ParseException("", 0);
         return gameId == null || ts != timestamp ||
-                playerId1 != playersPairControl.getPlayerId(playersPairControl.getName1()) ||
-                playerId2 != playersPairControl.getPlayerId(playersPairControl.getName2()) ||
+                playerId1 != playersPairSpinnersControl.getPlayerId(playersPairSpinnersControl.getName1()) ||
+                playerId2 != playersPairSpinnersControl.getPlayerId(playersPairSpinnersControl.getName2()) ||
                 score1 != getScore(etScore1) || score2 != getScore(etScore2);
     }
 
@@ -123,7 +141,7 @@ public class DialogEditGame extends DialogFragment {
         }
     }
 
-    private void loadGame() throws PlayersPairControl.NoEnoughPlayersException {
+    private void loadGame() throws PlayersPairSpinnersControl.NoEnoughPlayersException {
         if (gameId != null) {
             Cursor cursor = db.query(DB.TABLE_GAMES, null, DB.ID + " = ?",
                     new String[] {String.valueOf(gameId)}, null, null, null);
@@ -136,17 +154,17 @@ public class DialogEditGame extends DialogFragment {
             score1 = cursor.getInt(cursor.getColumnIndex(DB.SCORE1));
             score2 = cursor.getInt(cursor.getColumnIndex(DB.SCORE2));
             cursor.close();
-            playersPairControl.loadPlayers(playerId1, playerId2);
-            playersPairControl.reload(null);
+            playersPairSpinnersControl.loadPlayers(playerId1, playerId2);
+            playersPairSpinnersControl.reload(null);
 
-            playersPairControl.selectPlayer1ById(playerId1);
-            playersPairControl.selectPlayer2ById(playerId2);
+            playersPairSpinnersControl.selectPlayer1ById(playerId1);
+            playersPairSpinnersControl.selectPlayer2ById(playerId2);
             etScore1.setText(String.valueOf(score1));
             etScore2.setText(String.valueOf(score2));
         } else {
             timestamp = System.currentTimeMillis();
-            playersPairControl.loadPlayers();
-            playersPairControl.reload(null);
+            playersPairSpinnersControl.loadPlayers();
+            playersPairSpinnersControl.reload(null);
         }
         etDate.setText(Utils.timestampToString(getContext(), timestamp));
     }
@@ -231,15 +249,19 @@ public class DialogEditGame extends DialogFragment {
     }
 
     private void confirmAndSave() {
-        AlertDialog dialog = new AlertDialog();
-        dialog.setup(this, R.string.titleEditGame, R.string.msgConfirmEditGame)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        save();
-                    }
-                });
-        dialog.start();
+        if (gameId != null) {
+            AlertDialog dialog = new AlertDialog();
+            dialog.setup(this, R.string.titleEditGame, R.string.msgConfirmEditGame)
+                    .setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            save();
+                        }
+                    });
+            dialog.start();
+        } else {
+            save();
+        }
     }
 
     private void save() {
@@ -247,8 +269,8 @@ public class DialogEditGame extends DialogFragment {
             GameSaveHelper saver = new GameSaveHelper(DialogEditGame.this, loaderHelper);
             saver.setGameId(gameId).setMatchId(matchId)
                     .setTimestamp(Utils.stringToTimestamp(getContext(), etDate.getText().toString()))
-                    .setPlayer1Id(playersPairControl.getPlayerId(playersPairControl.getName1()))
-                    .setPlayer2Id(playersPairControl.getPlayerId(playersPairControl.getName2()))
+                    .setPlayer1Id(playersPairSpinnersControl.getPlayerId(playersPairSpinnersControl.getName1()))
+                    .setPlayer2Id(playersPairSpinnersControl.getPlayerId(playersPairSpinnersControl.getName2()))
                     .setScore1(getScore(etScore1)).setScore2(getScore(etScore2));
             saver.save();
             getDialog().dismiss();

@@ -21,7 +21,7 @@ import ua.dvalex.pingpong.db.DB;
 /**
  * Created by alex on 06.08.17
  */
-public class PlayersPairControl {
+public class PlayersPairSpinnersControl {
 
     public interface OnSelectionChangedListener {
         void change();
@@ -36,7 +36,7 @@ public class PlayersPairControl {
     private final Map<String, Long> nameToIdMap = new HashMap<>();
     private OnSelectionChangedListener onSelectionChangedListener = null;
 
-    public PlayersPairControl(Context context, Spinner spPlayer1, Spinner spPlayer2) {
+    public PlayersPairSpinnersControl(Context context, Spinner spPlayer1, Spinner spPlayer2) {
         this.context = context;
         this.spPlayer1 = spPlayer1;
         this.spPlayer2 = spPlayer2;

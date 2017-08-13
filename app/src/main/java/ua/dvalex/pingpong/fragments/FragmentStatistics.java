@@ -22,7 +22,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ua.dvalex.pingpong.R;
-import ua.dvalex.pingpong.controls.MatchesControl;
+import ua.dvalex.pingpong.controls.MatchesSpinnerControl;
 import ua.dvalex.pingpong.statistics.StatItem;
 import ua.dvalex.pingpong.statistics.Statistics;
 
@@ -30,7 +30,7 @@ public class FragmentStatistics extends Fragment {
 
     private static final String MATCH_ID_KEY = "MatchIdKey";
     private final int STATISTICS_LOADER_ID = hashCode();
-    private MatchesControl matchesControl;
+    private MatchesSpinnerControl matchesSpinnerControl;
     private LayoutInflater layoutInflater;
     private Spinner spMatches;
     private CheckBox cbAllMatches;
@@ -54,8 +54,8 @@ public class FragmentStatistics extends Fragment {
         spMatches = (Spinner) view.findViewById(R.id.spMatches);
         cbAllMatches = (CheckBox) view.findViewById(R.id.cbAllMatches);
         lvStatistics = (ListView) view.findViewById(R.id.lvStatistics);
-        matchesControl = new MatchesControl(getActivity(), layoutInflater, spMatches);
-        matchesControl.setOnSelect(new MatchesControl.OnSelect() {
+        matchesSpinnerControl = new MatchesSpinnerControl(getActivity(), layoutInflater, spMatches);
+        matchesSpinnerControl.setOnSelect(new MatchesSpinnerControl.OnSelect() {
             @Override
             public void onSelect() {
                 gatherStatistics();
@@ -197,12 +197,12 @@ public class FragmentStatistics extends Fragment {
     public void onOpenTab() {
         spMatches.setEnabled(true);
         cbAllMatches.setChecked(false);
-        matchesControl.forceLoad();
+        matchesSpinnerControl.forceLoad();
         gatherStatistics();
     }
 
     private void gatherStatistics() {
-        Long matchId = cbAllMatches.isChecked() ? null : matchesControl.getSelectedId();
+        Long matchId = cbAllMatches.isChecked() ? null : matchesSpinnerControl.getSelectedId();
         if (gatheringNow(matchId)) return;
         if (isGathering) {
             statisticsListViewLoader.cancelLoad();
