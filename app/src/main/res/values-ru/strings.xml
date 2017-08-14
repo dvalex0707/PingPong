@@ -3,6 +3,7 @@
     <string name="app_name">Настольный теннис</string>
     <string name="action_finish_match">Завершить матч</string>
     <string name="action_history">История</string>
+    <string name="action_exit">Выход</string>
 
     <string name="btnPlayers">Участники</string>
     <string name="btnGames">Игры</string>

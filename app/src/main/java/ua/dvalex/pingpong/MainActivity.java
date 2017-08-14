@@ -90,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
                 item.setChecked(historyMode);
                 fragmentGamesAppearanceController.setHistoryMode(historyMode);
                 break;
+            case R.id.action_exit:
+                finish();
+                break;
         }
         return true;
     }

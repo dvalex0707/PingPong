@@ -2,6 +2,7 @@
     <string name="app_name">PingPong</string>
     <string name="action_finish_match">Finish match</string>
     <string name="action_history">History</string>
+    <string name="action_exit">Exit</string>
 
     <string name="btnPlayers">Players</string>
     <string name="btnGames">Games</string>
