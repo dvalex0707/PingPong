@@ -80,6 +80,7 @@ public class MatchController implements SPConst {
                 settingsProvider.set(CURRENT_MATCH, null);
                 settingsProvider.set(LAST_WINNER, null);
                 fragmentGamesAppearanceController.setMatchStarted(false);
+                fragmentGamesAppearanceController.update();
             }
         });
         adb.show();

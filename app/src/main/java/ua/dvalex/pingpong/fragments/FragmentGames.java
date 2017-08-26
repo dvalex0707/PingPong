@@ -138,6 +138,7 @@ public class FragmentGames extends Fragment implements SPConst {
                 lvGames.smoothScrollToPosition(lvGames.getMaxScrollAmount());
             }
         });
+        fragmentGamesAppearanceController.setMatchCursorLoaderHelper(loaderHelper);
     }
 
     private class GamesHelperLoader implements CursorLoaderHelper.HelperLoader {
@@ -150,7 +151,7 @@ public class FragmentGames extends Fragment implements SPConst {
 
     private long getDisplayedMatchId() {
         return fragmentGamesAppearanceController.isHistoryMode() ?
-                matchesSpinnerControl.getSelectedId() :
+                Utils.resolveNull(matchesSpinnerControl.getSelectedId(), -1L) :
                 matchController.getCurrentMatch();
     }
 

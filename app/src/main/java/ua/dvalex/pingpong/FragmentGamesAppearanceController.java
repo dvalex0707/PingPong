@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import ua.dvalex.pingpong.db.CursorLoaderHelper;
+
 /**
  * Created by alex on 13.08.17
  */
@@ -25,6 +27,7 @@ public class FragmentGamesAppearanceController {
     private Button btnStartMatch;
     private MenuItem actionFinish = null;
     private boolean historyMode, matchStarted, enoughPlayers;
+    private CursorLoaderHelper matchCursorLoaderHelper;
 
     public void setActionFinish(MenuItem actionFinish) {
         this.actionFinish = actionFinish;
@@ -37,6 +40,10 @@ public class FragmentGamesAppearanceController {
         llHistoryLayout = (LinearLayout) view.findViewById(R.id.llHistoryLayout);
         btnStartMatch = (Button) view.findViewById(R.id.btnStartMatch);
         setUnderline((TextView) view.findViewById(R.id.lnkGoToPlayersTab));
+    }
+
+    public void setMatchCursorLoaderHelper(CursorLoaderHelper matchCursorLoaderHelper) {
+        this.matchCursorLoaderHelper = matchCursorLoaderHelper;
     }
 
     private void setUnderline(TextView textView) {
@@ -74,6 +81,9 @@ public class FragmentGamesAppearanceController {
             setVisibleOrGone(llAddNewGame, !historyMode && matchStarted && enoughPlayers);
             setVisibleOrGone(llHistoryLayout, historyMode);
             setVisibleOrGone(btnStartMatch, !historyMode && !matchStarted);
+        }
+        if (matchCursorLoaderHelper != null && !historyMode && matchStarted) {
+            matchCursorLoaderHelper.forceLoad();
         }
     }
 

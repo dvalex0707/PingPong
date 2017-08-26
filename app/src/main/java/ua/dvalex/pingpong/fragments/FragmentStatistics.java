@@ -22,6 +22,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ua.dvalex.pingpong.R;
+import ua.dvalex.pingpong.Utils;
 import ua.dvalex.pingpong.controls.MatchesSpinnerControl;
 import ua.dvalex.pingpong.statistics.StatItem;
 import ua.dvalex.pingpong.statistics.Statistics;
@@ -210,7 +211,7 @@ public class FragmentStatistics extends Fragment {
         matchIdToGather = matchId;
         isGathering = true;
         Bundle arguments = new Bundle();
-        arguments.putLong(MATCH_ID_KEY, matchId == null ? -1 : matchId);
+        arguments.putLong(MATCH_ID_KEY, Utils.resolveNull(matchId, -1L));
         statisticsListViewLoader = getLoaderManager().restartLoader(STATISTICS_LOADER_ID, arguments, new StatisticsLoaderCallbacks());
         statisticsListViewLoader.forceLoad();
     }

@@ -47,4 +47,8 @@ public class Utils {
                 .getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(view, 0);
     }
+
+    public static <T> T resolveNull(T obj, T resolution) {
+        return obj == null ? resolution : obj;
+    }
 }

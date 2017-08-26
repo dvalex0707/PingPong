@@ -75,7 +75,9 @@ public class CursorLoaderHelper {
     }
 
     public void forceLoad() {
-        activity.getSupportLoaderManager().getLoader(id).forceLoad();
+        Loader<Object> loader = activity.getSupportLoaderManager().getLoader(id);
+        if (loader == null) return;
+        loader.forceLoad();
     }
 
     public void setRunOnFinish(RunOnFinish runOnFinish) {
