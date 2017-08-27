@@ -58,7 +58,12 @@ public class MatchesSpinnerControl {
         spinnerCursorLoader.setRunOnFinish(new CursorLoaderHelper.RunOnFinish() {
             @Override
             public void run() {
-                spMatches.setSelection(spMatches.getCount() - 1);
+                int count = spMatches.getCount();
+                if (count > 0) {
+                    spMatches.setSelection(spMatches.getCount() - 1);
+                } else if (onSelect != null) {
+                    onSelect.onSelect();
+                }
             }
         });
         spMatches.setOnItemSelectedListener(getOnItemSelectedListener());
@@ -113,5 +118,9 @@ public class MatchesSpinnerControl {
     public Long getSelectedId() {
         View view = spMatches.getSelectedView();
         return view == null ? null : (long) view.getTag();
+    }
+
+    public int getCount() {
+        return spMatches.getCount();
     }
 }

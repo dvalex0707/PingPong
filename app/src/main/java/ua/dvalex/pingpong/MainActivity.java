@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(new PageChangeListener());
 
+        fragmentGamesAppearanceController.reset();
         PageSelectOnClickListener.setViewPager(mViewPager);
         findViewById(R.id.btnPlayers).setOnClickListener(PageSelectOnClickListener.PLAYERS);
         findViewById(R.id.btnGames).setOnClickListener(PageSelectOnClickListener.GAMES);
@@ -63,11 +64,12 @@ public class MainActivity extends AppCompatActivity {
 
         DB.getInstance().open(this);
         SettingsProvider.getInstance().setup(this);
-        matchController.startController(this);
 
         fragmentPlayers = new FragmentPlayers();
         fragmentGames = new FragmentGames();
         fragmentStatistics = new FragmentStatistics();
+
+        matchController.startController(fragmentGames);
     }
 
     @Override
@@ -86,7 +88,10 @@ public class MainActivity extends AppCompatActivity {
                 matchController.finishMatch();
                 break;
             case R.id.action_history:
-                fragmentGamesAppearanceController.setHistoryMode(!item.isChecked());
+                fragmentGamesAppearanceController.toggleHistoryMode();
+                break;
+            case R.id.action_delete_match:
+                matchController.deleteMatch();
                 break;
             case R.id.action_exit:
                 finish();
@@ -153,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
                     fragmentStatistics.onOpenTab();
                     break;
             }
+            fragmentGamesAppearanceController.setIsGamesTab(position == 1);
         }
 
         @Override

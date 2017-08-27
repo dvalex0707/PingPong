@@ -88,9 +88,11 @@ public class FragmentGames extends Fragment implements SPConst {
         matchesSpinnerControl.setOnSelect(new MatchesSpinnerControl.OnSelect() {
             @Override
             public void onSelect() {
+                btnAddGame.setEnabled(matchesSpinnerControl.getCount() > 0);
                 loaderHelper.forceLoad();
             }
         });
+        fragmentGamesAppearanceController.setSpinnerControl(matchesSpinnerControl);
         btnAddGame = (Button) v.findViewById(R.id.btnAddGame);
         btnStartMatch = (Button) v.findViewById(R.id.btnStartMatch);
         lvGames = (ListView) v.findViewById(R.id.lvGames);

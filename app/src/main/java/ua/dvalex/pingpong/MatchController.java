@@ -1,14 +1,15 @@
 package ua.dvalex.pingpong;
 
-import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
+import android.view.View;
 
 import java.util.Date;
 
+import ua.dvalex.pingpong.controls.MatchesSpinnerControl;
 import ua.dvalex.pingpong.db.DB;
+import ua.dvalex.pingpong.fragments.AlertDialog;
+import ua.dvalex.pingpong.fragments.FragmentGames;
 import ua.dvalex.pingpong.settings.SPConst;
 import ua.dvalex.pingpong.settings.SettingsProvider;
 
@@ -27,14 +28,14 @@ public class MatchController implements SPConst {
 
     private final FragmentGamesAppearanceController fragmentGamesAppearanceController =
             FragmentGamesAppearanceController.getInstance();
+    private FragmentGames fragmentGames;
     private SettingsProvider settingsProvider;
     private SQLiteDatabase db;
-    private Context context;
     private String matchDate;
     private long currentMatch;
 
-    public void startController(Context context) {
-        this.context = context;
+    public void startController(FragmentGames fragmentGames) {
+        this.fragmentGames = fragmentGames;
         settingsProvider = SettingsProvider.getInstance();
         db = DB.getInstance().get();
         matchDate = settingsProvider.getString(MATCH_DATE, null);
@@ -65,25 +66,59 @@ public class MatchController implements SPConst {
         } finally {
             db.endTransaction();
         }
+        fragmentGamesAppearanceController.getSpinnerControl().forceLoad();
     }
 
     public void finishMatch() {
-        AlertDialog.Builder adb = new AlertDialog.Builder(context);
-        adb.setTitle(R.string.action_finish_match).setMessage(R.string.msgConfirmFinishMatch);
-        adb.setNegativeButton(R.string.btnCancel, null);
-        adb.setPositiveButton(R.string.btnYes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                matchDate = null;
-                currentMatch = -1;
-                settingsProvider.set(MATCH_DATE, null);
-                settingsProvider.set(CURRENT_MATCH, null);
-                settingsProvider.set(LAST_WINNER, null);
-                fragmentGamesAppearanceController.setMatchStarted(false);
-                fragmentGamesAppearanceController.update();
-            }
-        });
-        adb.show();
+        new AlertDialog()
+                .setup(fragmentGames, R.string.action_finish_match, R.string.msgConfirmFinishMatch)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        internalFinishMatch();
+                    }
+                })
+                .start();
+    }
+
+    private void internalFinishMatch() {
+        matchDate = null;
+        currentMatch = -1;
+        settingsProvider.set(MATCH_DATE, null);
+        settingsProvider.set(CURRENT_MATCH, null);
+        settingsProvider.set(LAST_WINNER, null);
+        fragmentGamesAppearanceController.setMatchStarted(false);
+    }
+
+    public void deleteMatch() {
+        final MatchesSpinnerControl spinnerControl = fragmentGamesAppearanceController.getSpinnerControl();
+        if (spinnerControl == null) return;
+        final Long id = spinnerControl.getSelectedId();
+        if (id == null) return;
+        new AlertDialog()
+                .setup(fragmentGames, R.string.action_delete_match, R.string.msgConfirmDeleteMatch)
+                .setIsRed()
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        boolean success = false;
+                        try {
+                            db.beginTransaction();
+                            String[] whereArgs = {String.valueOf(id)};
+                            db.delete(DB.TABLE_GAMES, DB.MATCH + " = ?", whereArgs);
+                            db.delete(DB.TABLE_MATCHES, DB.ID + " = ?", whereArgs);
+                            db.setTransactionSuccessful();
+                            spinnerControl.forceLoad();
+                            success = true;
+                        } finally {
+                            db.endTransaction();
+                        }
+                        if (success && id == currentMatch) {
+                            internalFinishMatch();
+                        }
+                    }
+                })
+                .start();
     }
 
     public long getCurrentMatch() {

@@ -82,7 +82,7 @@ public class DialogEditGame extends DialogFragment {
         return view;
     }
 
-    public void setLoaderHelper(CursorLoaderHelper loaderHelper) {
+    private void setLoaderHelper(CursorLoaderHelper loaderHelper) {
         this.loaderHelper = loaderHelper;
     }
 

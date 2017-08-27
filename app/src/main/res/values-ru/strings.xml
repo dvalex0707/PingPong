@@ -3,6 +3,7 @@
     <string name="app_name">Настольный теннис</string>
     <string name="action_finish_match">Завершить матч</string>
     <string name="action_history">История</string>
+    <string name="action_delete_match">Удалить матч</string>
     <string name="action_exit">Выход</string>
 
     <string name="btnPlayers">Участники</string>
@@ -29,6 +30,7 @@
     <string name="msgConfirmDeleteGame">Вы желаете удалить эту игру?</string>
     <string name="msgConfirmEditGame">Вы желаете изменить результаты этой игры?</string>
     <string name="msgConfirmChangeDateTime">Вы собираетесь изменить дату или время этой игры. Вы действительно хотите это сделать?</string>
+    <string name="msgConfirmDeleteMatch">Вы действительно желаете удалить ВЕСЬ матч из истории?</string>
     <string name="msgAtLeastTwoPlayersRequired">Как минимум два участника требуются для игры</string>
     <string name="msgAtLeastTwoPlayersShouldBeSelectedOnPlayersTab">Как минимум два участника должны быть выбраны на вкладке ’Участники’</string>
     <string name="msgDateTimeFormatError">Ошибка формата Даты/Времени</string>
