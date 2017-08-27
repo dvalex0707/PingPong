@@ -2,6 +2,7 @@ package ua.dvalex.pingpong;
 
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -25,12 +26,15 @@ public class FragmentGamesAppearanceController {
 
     private LinearLayout llGamesLayout = null, llMsgTooFewPlayers, llAddNewGame, llHistoryLayout;
     private Button btnStartMatch;
-    private MenuItem actionFinish = null;
+    private MenuItem actionFinish = null, actionHistory;
+    private String historyTitle;
     private boolean historyMode, matchStarted, enoughPlayers;
     private CursorLoaderHelper matchCursorLoaderHelper;
 
-    public void setActionFinish(MenuItem actionFinish) {
-        this.actionFinish = actionFinish;
+    public void setMenu(Menu menu) {
+        actionFinish = menu.findItem(R.id.action_finish_match);
+        actionHistory = menu.findItem(R.id.action_history);
+        historyTitle = actionHistory.getTitle().toString();
     }
 
     public void setGamesView(View view) {
@@ -74,6 +78,11 @@ public class FragmentGamesAppearanceController {
     public void update() {
         if (actionFinish != null) {
             actionFinish.setVisible(!historyMode && matchStarted);
+            actionHistory.setTitle((historyMode ? "< " : "") + historyTitle);
+            actionHistory.setCheckable(historyMode);
+            actionHistory.setShowAsAction(historyMode ?
+                    MenuItem.SHOW_AS_ACTION_IF_ROOM :
+                    MenuItem.SHOW_AS_ACTION_NEVER);
         }
         if (llGamesLayout != null) {
             setVisibleOrGone(llGamesLayout, historyMode || matchStarted);

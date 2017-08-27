@@ -74,9 +74,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        fragmentGamesAppearanceController.setActionFinish(menu.findItem(R.id.action_finish_match));
+        fragmentGamesAppearanceController.setMenu(menu);
         fragmentGamesAppearanceController.update();
-        menu.findItem(R.id.action_history).setChecked(fragmentGamesAppearanceController.isHistoryMode());
         return true;
     }
 
@@ -87,9 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 matchController.finishMatch();
                 break;
             case R.id.action_history:
-                boolean historyMode = !item.isChecked();
-                item.setChecked(historyMode);
-                fragmentGamesAppearanceController.setHistoryMode(historyMode);
+                fragmentGamesAppearanceController.setHistoryMode(!item.isChecked());
                 break;
             case R.id.action_exit:
                 finish();
